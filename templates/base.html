@@ -10,31 +10,53 @@
 
   <header class="hero-header">
     <div class="auth-buttons">
-        <a href="#login" class="auth-btn">Увійти</a>
-        <a href="#register" class="auth-btn register">Зареєструватися</a>
+      <a href="#" class="auth-btn" data-modal="login">Увійти</a>
+      <a href="#" class="auth-btn" data-modal="register">Зареєструватися</a>
     </div>
-      
+
     <div class="overlay"></div>
     <div class="header-content">
       <h1>Coffee Heroes</h1>
       <p>Найкраща кава — лише для справжніх героїв</p>
       <nav>
         <ul class="nav-menu">
-          <li><a href="#menu">Меню</a></li>
-          <li><a href="#about">Про нас</a></li>
-          <li><a href="#reviews">Відгуки</a></li>
+          <li><a href="menu.html">Меню</a></li>
+          <li><a href="about.html">Про нас</a></li>
+          <li><a href="reviews.html">Відгуки</a></li>
         </ul>
       </nav>
-      <a href="#menu" class="btn">Переглянути меню</a>
+      <a href="menu.html" class="btn">Переглянути меню</a>  
     </div>
   </header>
 
-<script src="../static/script.js"></script>
-<header class="hero-header">
-  <div class="auth-buttons">
-      <a href="login.html" class="auth-btn">Увійти</a>
-      <a href="register.html" class="auth-btn register">Зареєструватися</a>
+  <div id="login-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Увійти</h2>
+      <input type="text" placeholder="Email" />
+      <input type="password" placeholder="Пароль" />
+      <button class="btn">Увійти</button>
+      <p>Ще не маєш акаунту?
+        <a href="#" class="switch-modal" data-modal="register">Зареєструватися</a>
+      </p>
+    </div>
   </div>
-  
+
+
+  <div id="register-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Реєстрація</h2>
+      <input type="text" placeholder="Email" />
+      <input type="password" placeholder="Пароль" />
+      <input type="password" placeholder="Підтвердження пароля" />
+      <button class="btn">Зареєструватися</button>
+      <p>Вже маєш акаунт?
+        <a href="#" class="switch-modal" data-modal="login">Увійти</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
 </body>
 </html>
