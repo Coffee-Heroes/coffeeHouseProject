@@ -7,7 +7,7 @@ body, html {
 
 .hero-header {
   position: relative;
-  background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348'); 
+  background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348');
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -15,186 +15,175 @@ body, html {
   align-items: center;
   justify-content: center;
   text-align: center;
-  }
-  
-  .overlay {body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
-  }
-  
-  .hero-header {
-    position: relative;
-    background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348'); /* картинка кави */
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-  }
-  
-  .header-content {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    padding: 20px;
-  }
-  
-  .header-content h1 {
-    font-size: 4rem;
-    margin-bottom: 10px;
-  }
-  
-  .header-content p {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
-  .nav-menu {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    list-style: none;
-    padding: 0;
-    margin-bottom: 30px;
-  }
-  
-  .nav-menu a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .nav-menu a:hover {
-    color: #c9a46c;
-  }
-  
-  .btn {
-    background-color: #c9a46c;
-    color: black;
-    padding: 12px 25px;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 25px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn:hover {
-    background-color: #e6bb7c;
-  }
-  
-.auth-buttons {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    display: flex;
-    gap: 10px;
-    z-index: 2;
-  }
-  
-.auth-btn {
-    background-color: transparent;
-    border: 2px solid white;
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-  }
-  
-.auth-btn:hover {
-    background-color: #c9a46c;
-    color: black;
-    border-color: #c9a46c;
-  }
-  
-.auth-btn.register {
-    background-color: white;
-    color: #4b2e2e;
-    border: 2px solid white;
-  }
-  
-.auth-btn.register:hover {
-    background-color: #c9a46c;
-    color: black;
-    border-color: #c9a46c;
-  }
+}
 
- 
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.header-content h1 {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.header-content p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+  color: #c9a46c;
+}
+
+.btn {
+  background-color: #c9a46c;
+  color: black;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #e6bb7c;
+}
+
+.auth-buttons {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.auth-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: #c9a46c;
+  color: black;
+  border-color: #c9a46c;
+}
+
+.auth-btn.register {
+  background-color: white;
+  color: #4b2e2e;
+  border: 2px solid white;
+}
+
+.auth-btn.register:hover {
+  background-color: #c9a46c;
+  color: black;
+  border-color: #c9a46c;
+}
+
+/* Модальне вікно */
+
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-  }
-  
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
 .modal.hidden {
-    display: none;
-  }
-  
+  display: none;
+}
+
 .modal-content {
-    background-color: #fff;
-    color: #333;
-    padding: 30px;
-    border-radius: 20px;
-    width: 300px;
-    text-align: center;
-    position: relative;
-    animation: fadeIn 0.4s ease;
-  }
-  
+  background-color: #fff;
+  color: #333;
+  padding: 30px;
+  border-radius: 20px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.4s ease;
+}
+
 .modal-content h2 {
-    margin-bottom: 20px;
-  }
-  
+  margin-bottom: 20px;
+}
+
 .modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-  }
-  
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
 .modal-content .btn {
-    width: 100%;
-    background-color: #c9a46c;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
+  width: 100%;
+  background-color: #c9a46c;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .modal-content .btn:hover {
-    background-color: #b38e57;
-  }
-  
+  background-color: #b38e57;
+}
+
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    color: #666;
-    cursor: pointer;
-  }
-  
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+}
+
+/* Анімація */
+
 @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
