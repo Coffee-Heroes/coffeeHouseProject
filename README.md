@@ -1,2 +1,3 @@
 # coffeeHouseProject
-могут быть ошибки/баги с работой бд, но на время комита их замечено не было
+this project is a coffee shop
+4 people are working on this project.
