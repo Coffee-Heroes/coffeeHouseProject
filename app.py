@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, redirect, url_for, flash, session
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
+from models import RoleEnum
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'u3g4v3xdc4'  
@@ -15,15 +16,26 @@ db.init_app(app)
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        username = form.username.data
+        match username:
+            case 'Semen':
+                role = RoleEnum.ADMIN
+            case 'Andrew':
+                role = RoleEnum.ADMIN
+            case 'Sviatoslav':
+                role = RoleEnum.ADMIN
+            case 'Ivan':
+                role = RoleEnum.ADMIN
         new_user = User(
-            username=form.username.data,
+            username=username,
             email=form.email.data,
-            password=form.password.data
+            password=form.password.data,
+            role = role
         )
         db.session.add(new_user)
         db.session.commit()
-        flash('Успешная регистрация!')
-        return redirect(url_for('login'))
+        flash('You`ve been registrated successfully!')
+        return redirect(url_for('profile'))
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,10 +45,10 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()  
         if user and user.password == form.password.data:
             session['username'] = user.username  
-            flash('Вход выполнен!')
+            flash('You`ve been signed in successfully!')
             return redirect(url_for('profile'))
         else:
-            flash('Неверный логин или пароль')
+            flash('Wrong password or username')
     return render_template('login.html', form=form)
 
 @app.route('/create_order', methods=['GET', 'POST'])
