@@ -1,7 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, flash, session
-from models import db, User
-from db import RegistrationForm, LoginForm
 import os
+from flask import Flask, render_template, redirect, url_for, flash, session
+from models import db, User, Order
+from db import RegistrationForm, LoginForm, OrderForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'u3g4v3xdc4'  
@@ -30,7 +30,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()  
         if user and user.password == form.password.data:
             session['username'] = user.username  
             flash('Вход выполнен!')
@@ -39,6 +39,31 @@ def login():
             flash('Неверный логин или пароль')
     return render_template('login.html', form=form)
 
+@app.route('/create_order', methods=['GET', 'POST'])
+def create_order():
+    form = OrderForm()
+    if form.validate_on_submit():
+        if 'username' not in session:
+            flash('You need to log in first.')
+            return redirect(url_for('login'))
+        
+        # Получаем текущего пользователя из сессии
+        user = User.query.filter_by(username=session['username']).first()
+
+        # Создаём новый заказ
+        new_order = Order(
+            product_name=form.product_name.data,
+            quantity=form.quantity.data,
+            customer_id=user.id,
+            delivery_address=form.delivery_address.data,
+            comment=form.comment.data
+        )
+        db.session.add(new_order)
+        db.session.commit()
+        flash('Your order has been created successfully!')
+        return redirect(url_for('profile'))  # Перенаправляем на профиль или другую страницу
+
+    return render_template('create_order.html', form=form)
 
 
 @app.route('/profile')
