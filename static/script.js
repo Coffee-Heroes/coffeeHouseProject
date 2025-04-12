@@ -1,20 +1,49 @@
-const modal = document.getElementById("auth-modal");
-const authLinks = document.querySelectorAll(".auth-btn");
-const closeBtn = document.querySelector(".close-btn");
+const authButtons = document.querySelectorAll(".auth-btn");
+const modals = document.querySelectorAll(".modal");
+const closeBtns = document.querySelectorAll(".close-btn");
+const switchLinks = document.querySelectorAll(".switch-modal");
 
-authLinks.forEach((link) => {
-  link.addEventListener("click", (e) => {
+
+authButtons.forEach(button => {
+  button.addEventListener("click", e => {
     e.preventDefault();
-    modal.classList.remove("hidden");
+    const targetModal = button.dataset.modal;
+    openModal(targetModal);
   });
 });
 
-closeBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
+
+switchLinks.forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    closeAllModals();
+    const targetModal = link.dataset.modal;
+    openModal(targetModal);
+  });
 });
 
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.add("hidden");
-  }
+
+closeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    closeAllModals();
+  });
 });
+
+
+window.addEventListener("click", e => {
+  modals.forEach(modal => {
+    if (e.target === modal) {
+      closeAllModals();
+    }
+  });
+});
+
+
+function openModal(id) {
+  document.getElementById(`${id}-modal`).classList.remove("hidden");
+}
+
+
+function closeAllModals() {
+  modals.forEach(modal => modal.classList.add("hidden"));
+}
