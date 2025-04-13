@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
 from models import RoleEnum
@@ -11,6 +11,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'database', 'users.db')}"
 
 db.init_app(app)
+
+app.route('/', methods=['GET', 'POST'])
+def base():
+    if request.method == "POST":
+        return redirect(url_for("base"))
+    return render_template("base.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -73,8 +79,7 @@ def create_order():
         db.session.add(new_order)
         db.session.commit()
         flash('Your order has been created successfully!')
-        return redirect(url_for('profile'))  # Перенаправляем на профиль или другую страницу
-
+        return redirect(url_for('profile'))
     return render_template('create_order.html', form=form)
 
 
