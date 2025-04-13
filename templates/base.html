@@ -20,9 +20,9 @@
       <p>Найкраща кава — лише для справжніх героїв</p>
       <nav>
         <ul class="nav-menu">
-          <li><a href="menu.html">Меню</a></li>
-          <li><a href="about.html">Про нас</a></li>
-          <li><a href="reviews.html">Відгуки</a></li>
+          <li><a href="{{ url_for('menu') }}">Меню</a></li>
+          <li><a href="{{ url_for('about') }}">Про нас</a></li>
+          <li><a href="{{ url_for('reviews') }}">Відгуки</a></li>
         </ul>
       </nav>
       <a href="menu.html" class="btn">Переглянути меню</a>  
@@ -33,9 +33,13 @@
     <div class="modal-content">
       <span class="close-btn">&times;</span>
       <h2>Увійти</h2>
-      <input type="Email" placeholder="Email" />
-      <input type="password" placeholder="Пароль" />
-      <button class="btn">Увійти</button>
+      <form action="{{ url_for('login') }}", method="POST">
+        {{ login_form.hidden_tag() }}
+        {{ login_form.email(placeholder='Email') }}
+        {{ login_form.password(placeholder='Password') }}
+        {{ login_form.submit(class='btn') }}
+      </form>
+      
       <p>Ще не маєш акаунту?
         <a href="#" class="switch-modal" data-modal="register">Зареєструватися</a>
       </p>
@@ -47,11 +51,15 @@
     <div class="modal-content">
       <span class="close-btn">&times;</span>
       <h2>Реєстрація</h2>
-      <input type='text' placeholder="Username">
-      <input type="Email" placeholder="Email" />
-      <input type="password" placeholder="Пароль" />
-      <input type="password" placeholder="Підтвердження пароля" />
-      <button class="btn">Зареєструватися</button>
+      <form action="{{ url_for('login') }}", method="POST">
+        {{ registration_form.hidden_tag() }}
+        {{ registration_form.username(placeholder='Username') }}
+        {{ registration_form.email(placeholder='Email') }}
+        {{ registration_form.password(placeholder='Password') }}
+        {{ registration_form.confirm(placeholder='Confirm password') }}
+        {{ registration_form.submit(class='btn') }}
+      </form>
+
       <p>Вже маєш акаунт?
         <a href="#" class="switch-modal" data-modal="login">Увійти</a>
       </p>

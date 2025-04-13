@@ -12,50 +12,51 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data
 
 db.init_app(app)
 
-app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def base():
-    if request.method == "POST":
-        return redirect(url_for("base"))
-    return render_template("base.html")
+    login_form = LoginForm()
+    registration_form = RegistrationForm()
+    return render_template('base.html', login_form=login_form, registration_form=registration_form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        match username:
-            case 'Semen':
+    login_form = LoginForm()
+    registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+        current_user = User.query.filter_by(email = registration_form.email.data).first()
+        if current_user:
+            flash('This email is already registered')
+        else:
+            username = registration_form.username.data
+            role = RoleEnum.USER
+            if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
                 role = RoleEnum.ADMIN
-            case 'Andrew':
-                role = RoleEnum.ADMIN
-            case 'Sviatoslav':
-                role = RoleEnum.ADMIN
-            case 'Ivan':
-                role = RoleEnum.ADMIN
-        new_user = User(
-            username=username,
-            email=form.email.data,
-            password=form.password.data,
-            role = role
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        flash('You`ve been registrated successfully!')
-        return redirect(url_for('profile'))
-    return render_template('register.html', form=form)
+            
+            new_user = User(
+                username = username,
+                email = registration_form.email.data,
+                password = registration_form.password.data,
+                role = role
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            flash('You`ve been registered successfully!')
+            return redirect(url_for('profile'))
+    return render_template('base.html', login_form=login_form, registration_form=registration_form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()  
-        if user and user.password == form.password.data:
-            session['username'] = user.username  
+    login_form = LoginForm()
+    registration_form = RegistrationForm()
+    if login_form.validate_on_submit():
+        user = User.query.filter_by(email=login_form.email.data).first()
+        if user and user.password == login_form.password.data:
+            session['username'] = user.username
             flash('You`ve been signed in successfully!')
             return redirect(url_for('profile'))
         else:
-            flash('Wrong password or username')
-    return render_template('login.html', form=form)
+            flash('Invalid credentials')
+    return render_template('base.html', login_form=login_form, registration_form=registration_form) 
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
@@ -87,12 +88,7 @@ def create_order():
 def profile():
     if 'username' not in session:
         return redirect(url_for('login'))
-    return f"Добро пожаловать, {session['username']}!"
-
-@app.route("/")
-def base():
-    return render_template("base.html")
-
+    return f"Welcome, {session['username']}!"
 
 @app.route("/about/")
 def about():
@@ -106,7 +102,7 @@ def menu():
 
 @app.route("/reviews/")
 def reviews():
-    return render_template("rewiews.html")
+    return render_template("reviews.html")
 
 
 @app.errorhandler(404)  # для каждой страницы если не тот url
@@ -115,4 +111,6 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
+    with app.app_context():
+        print(app.url_map)
     app.run(port=3001, debug=False)
