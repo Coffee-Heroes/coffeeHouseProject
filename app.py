@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, url_for, flash, session, req
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
 from models import RoleEnum
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, current_user, logout_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'u3g4v3xdc4'  
@@ -19,6 +19,13 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.route('/profile', methods= ["GET"])
+def profile():
+    if current_user.is_authenticated:
+        return f"привіт, {current_user.username}!"
+    else:
+        return "зайдіть в аккаунт"
+
 @app.route("/", methods=["GET"])
 def base():
     login_form = LoginForm()
@@ -26,7 +33,7 @@ def base():
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET","POST"])
 def login():
     login_form = LoginForm()
     registration_form = RegistrationForm()
@@ -41,7 +48,7 @@ def login():
             flash("Invalid credentials")
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     login_form = LoginForm()
     registration_form = RegistrationForm()
@@ -67,6 +74,10 @@ def register():
             flash("You’ve been registered successfully!")
             return redirect(url_for('base'))
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
+
+@app.route('/logout', methods=["GET"])
+def logout():
+    logout_user()
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
@@ -94,11 +105,11 @@ def create_order():
     return render_template('create_order.html', form=form)
 
 
-@app.route('/profile')
-def profile():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    return f"Welcome, {session['username']}!"
+# @app.route('/profile')
+# def profile():
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
+#     return f"Welcome, {session['username']}!"
 
 @app.route("/about/")
 def about():

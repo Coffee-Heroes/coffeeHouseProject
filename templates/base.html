@@ -1,71 +1,76 @@
 <!DOCTYPE html>
 <html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coffee Heroes</title>
-  <link rel="stylesheet" href="../static/style.css">
-</head>
-<body>
-  
-  <header class="hero-header">
-    <div class="auth-buttons">
-      <a href="#" class="auth-btn" data-modal="login">Увійти</a>
-      <a href="#" class="auth-btn" data-modal="register">Зареєструватися</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee Heroes</title>
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body>
+    <header class="hero-header">
+      <div class="auth-buttons">
+        {% if current_user.is_authenticated %} 
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="auth-btn" data-modal="login">Login</a>
+        <a href="{{ url_for('register') }}" class="auth-btn" data-modal="register">Register</a>
+        {% endif %}
+      </div>
+
+      <div class="overlay"></div>
+      <div class="header-content">
+        <h1>Coffee Heroes</h1>
+        <p>Найкраща кава — лише для справжніх героїв</p>
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="{{ url_for('menu') }}">Меню</a></li>
+            <li><a href="{{ url_for('about') }}">Про нас</a></li>
+            <li><a href="{{ url_for('reviews') }}">Відгуки</a></li>
+          </ul>
+        </nav>
+        <a href="menu.html" class="btn">Переглянути меню</a>
+      </div>
+    </header>
+
+    <div id="login-modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Увійти</h2>
+        <form action="{{ url_for('login') }}" , method="POST">
+          {{ login_form.hidden_tag() }} {{ login_form.email(placeholder='Email')
+          }} {{ login_form.password(placeholder='Password') }} {{
+          login_form.submit(class='btn') }}
+        </form>
+
+        <p>
+          Ще не маєш акаунту?
+          <a href="#" class="switch-modal" data-modal="register"
+            >Зареєструватися</a
+          >
+        </p>
+      </div>
     </div>
 
-    <div class="overlay"></div>
-    <div class="header-content">
-      <h1>Coffee Heroes</h1>
-      <p>Найкраща кава — лише для справжніх героїв</p>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="{{ url_for('menu') }}">Меню</a></li>
-          <li><a href="{{ url_for('about') }}">Про нас</a></li>
-          <li><a href="{{ url_for('reviews') }}">Відгуки</a></li>
-        </ul>
-      </nav>
-      <a href="menu.html" class="btn">Переглянути меню</a>  
+    <div id="register-modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Реєстрація</h2>
+        <form action="{{ url_for('login') }}" , method="POST">
+          {{ registration_form.hidden_tag() }} {{
+          registration_form.username(placeholder='Username') }} {{
+          registration_form.email(placeholder='Email') }} {{
+          registration_form.password(placeholder='Password') }} {{
+          registration_form.confirm(placeholder='Confirm password') }} {{
+          registration_form.submit(class='btn') }}
+        </form>
+
+        <p>
+          Вже маєш акаунт?
+          <a href="#" class="switch-modal" data-modal="login">Увійти</a>
+        </p>
+      </div>
     </div>
-  </header>
 
-  <div id="login-modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2>Увійти</h2>
-      <form action="{{ url_for('login') }}", method="POST">
-        {{ login_form.hidden_tag() }}
-        {{ login_form.email(placeholder='Email') }}
-        {{ login_form.password(placeholder='Password') }}
-        {{ login_form.submit(class='btn') }}
-      </form>
-      
-      <p>Ще не маєш акаунту?
-        <a href="#" class="switch-modal" data-modal="register">Зареєструватися</a>
-      </p>
-    </div>
-  </div>
-
-
-  <div id="register-modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2>Реєстрація</h2>
-      <form action="{{ url_for('login') }}", method="POST">
-        {{ registration_form.hidden_tag() }}
-        {{ registration_form.username(placeholder='Username') }}
-        {{ registration_form.email(placeholder='Email') }}
-        {{ registration_form.password(placeholder='Password') }}
-        {{ registration_form.confirm(placeholder='Confirm password') }}
-        {{ registration_form.submit(class='btn') }}
-      </form>
-
-      <p>Вже маєш акаунт?
-        <a href="#" class="switch-modal" data-modal="login">Увійти</a>
-      </p>
-    </div>
-  </div>
-
-  <script src="../static/script.js"></script>
-</body>
+    <script src="../static/script.js"></script>
+  </body>
 </html>
