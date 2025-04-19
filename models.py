@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
 from sqlalchemy import Enum as SqlEnum
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -8,7 +9,7 @@ class RoleEnum(Enum):
     ADMIN = 'admin'
     USER = 'user'
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)

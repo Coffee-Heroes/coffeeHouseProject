@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, url_for, flash, session, req
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
 from models import RoleEnum
+from flask_login import LoginManager, login_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'u3g4v3xdc4'  
@@ -11,52 +12,61 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'database', 'users.db')}"
 
 db.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-@app.route('/', methods=['GET', 'POST'])
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route("/", methods=["GET"])
 def base():
     login_form = LoginForm()
     registration_form = RegistrationForm()
-    return render_template('base.html', login_form=login_form, registration_form=registration_form)
+    return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    login_form = LoginForm()
-    registration_form = RegistrationForm()
-    if registration_form.validate_on_submit():
-        current_user = User.query.filter_by(email = registration_form.email.data).first()
-        if current_user:
-            flash('This email is already registered')
-        else:
-            username = registration_form.username.data
-            role = RoleEnum.USER
-            if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
-                role = RoleEnum.ADMIN
-            
-            new_user = User(
-                username = username,
-                email = registration_form.email.data,
-                password = registration_form.password.data,
-                role = role
-            )
-            db.session.add(new_user)
-            db.session.commit()
-            flash('You`ve been registered successfully!')
-            return redirect(url_for('profile'))
-    return render_template('base.html', login_form=login_form, registration_form=registration_form)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["POST"])
 def login():
     login_form = LoginForm()
     registration_form = RegistrationForm()
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
-        if user and user.password == login_form.password.data:
+        if user and user.password == login_form.password.data:  # ❗️рекомендується використовувати hashing
+            login_user(user, remember=True)
             session['username'] = user.username
-            flash('You`ve been signed in successfully!')
-            return redirect(url_for('profile'))
+            flash("You’ve been signed in successfully!")
+            return redirect(url_for('base'))
         else:
-            flash('Invalid credentials')
-    return render_template('base.html', login_form=login_form, registration_form=registration_form) 
+            flash("Invalid credentials")
+    return render_template("base.html", login_form=login_form, registration_form=registration_form)
+
+@app.route("/register", methods=["POST"])
+def register():
+    login_form = LoginForm()
+    registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+        existing_user = User.query.filter_by(email=registration_form.email.data).first()
+        if existing_user:
+            flash("Email already registered")
+        else:
+            username = registration_form.username.data
+            role = RoleEnum.USER
+
+            if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
+                role = RoleEnum.ADMIN
+
+            new_user = User(
+                username=username,
+                email=registration_form.email.data,
+                password=registration_form.password.data,
+                role=role
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            flash("You’ve been registered successfully!")
+            return redirect(url_for('base'))
+    return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
@@ -111,6 +121,7 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        print(app.url_map)
-    app.run(port=3001, debug=False)
+      with app.app_context():
+        db.create_all()
+        print("Database tables created!")
+      app.run(port=3001, debug=False)
