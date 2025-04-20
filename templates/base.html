@@ -10,8 +10,12 @@
   
   <header class="hero-header">
     <div class="auth-buttons">
-      <a href="#" class="auth-btn" data-modal="login">Увійти</a>
-      <a href="#" class="auth-btn" data-modal="register">Зареєструватися</a>
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('logout') }}" class="auth-btn" data-modal="logout">Вийти</a>
+      {% else %}
+      <a href="{{ url_for('login') }}" class="auth-btn" data-modal="login">Увійти</a>
+      <a href="{{ url_for('register') }}" class="auth-btn" data-modal="register">Зареєструватися</a>
+      {% endif %}
     </div>
 
     <div class="overlay"></div>
