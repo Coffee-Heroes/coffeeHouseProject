@@ -4,9 +4,11 @@ from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
 from models import RoleEnum
 from flask_login import LoginManager, login_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from decouple import config
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'u3g4v3xdc4'  
+app.config['SECRET_KEY'] = config('SECRET_KEY')
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'database', 'users.db')}"
@@ -32,7 +34,7 @@ def login():
     registration_form = RegistrationForm()
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
-        if user and user.password == login_form.password.data:  # ❗️рекомендується використовувати hashing
+        if user and check_password_hash(user.password, login_form.password.data):  # ❗️рекомендується використовувати hashing
             login_user(user, remember=True)
             session['username'] = user.username
             flash("You’ve been signed in successfully!")
@@ -41,7 +43,7 @@ def login():
             flash("Invalid credentials")
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     login_form = LoginForm()
     registration_form = RegistrationForm()
@@ -52,14 +54,19 @@ def register():
         else:
             username = registration_form.username.data
             role = RoleEnum.USER
-
+            password=registration_form.password.data
+            confirm=registration_form.password.data
+            
             if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
                 role = RoleEnum.ADMIN
 
+            if password != confirm:
+                flash('Passwords must be equal')
+                
             new_user = User(
                 username=username,
                 email=registration_form.email.data,
-                password=registration_form.password.data,
+                password=generate_password_hash(password),
                 role=role
             )
             db.session.add(new_user)

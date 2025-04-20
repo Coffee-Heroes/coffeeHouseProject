@@ -51,7 +51,7 @@
     <div class="modal-content">
       <span class="close-btn">&times;</span>
       <h2>Реєстрація</h2>
-      <form action="{{ url_for('login') }}", method="POST">
+      <form action="{{ url_for('register') }}", method="POST">
         {{ registration_form.hidden_tag() }}
         {{ registration_form.username(placeholder='Username') }}
         {{ registration_form.email(placeholder='Email') }}

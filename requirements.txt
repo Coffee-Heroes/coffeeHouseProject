@@ -2,3 +2,4 @@ flask
 flask-wtf
 flask-SQLAlchemy
 email-validator
+python-decouple

@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #a8967c; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  
+  .cafe-container {
+    background-color: #6F4E37;
+    color: #fff;
+    border-radius: 20px;
+    max-width: 900px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  
+    
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeInUp 1s ease-out forwards;
+  }
+  
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  .cafe-image {
+    flex: 1 1 300px;
+  }
+  
+  .cafe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  
+  .cafe-text {
+    flex: 1 1 400px;
+    padding: 40px;
+  }
+  
+  .cafe-text h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .cafe-text p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .cafe-container {
+      flex-direction: column;
+    }
+  }
+  
