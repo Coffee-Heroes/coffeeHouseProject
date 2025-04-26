@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, render_template, redirect, url_for, flash, session, request
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
@@ -118,7 +119,9 @@ def about():
 
 @app.route("/menu/")
 def menu():
-    return render_template("menu.html")
+    with open("dishes.json", "r", encoding="utf-8") as json_file: # прогружает json чтобы взять оттуда блюда и поместить в menu.html
+        data = json.load(json_file)
+        return render_template("menu.html", data=data)
 
 
 @app.route("/reviews/")
