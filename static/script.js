@@ -6,9 +6,11 @@ const switchLinks = document.querySelectorAll(".switch-modal");
 
 authButtons.forEach(button => {
   button.addEventListener("click", e => {
-    e.preventDefault();
     const targetModal = button.dataset.modal;
-    openModal(targetModal);
+    if (targetModal) {
+      e.preventDefault();
+      openModal(targetModal);
+    }
   });
 });
 
@@ -47,3 +49,7 @@ function openModal(id) {
 function closeAllModals() {
   modals.forEach(modal => modal.classList.add("hidden"));
 }
+
+setTimeout(() => {
+  document.querySelectorAll('.flash-message').forEach(el => el.remove());
+}, 4000);

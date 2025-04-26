@@ -11,7 +11,10 @@
   <header class="hero-header">
     <div class="auth-buttons">
       {% if current_user.is_authenticated %}
-      <a href="{{ url_for('logout') }}" class="auth-btn" data-modal="logout">Вийти</a>
+      <a href="{{ url_for('logout') }}" class="auth-btn">Вийти</a>
+        <!-- {% if current_user.role == 'admin' %}
+        <a href="#" class="auth-btn" data-modal="add_order">Додати блюдо</a>
+        {% endif %} -->
       {% else %}
       <a href="{{ url_for('login') }}" class="auth-btn" data-modal="login">Увійти</a>
       <a href="{{ url_for('register') }}" class="auth-btn" data-modal="register">Зареєструватися</a>
@@ -69,7 +72,15 @@
       </p>
     </div>
   </div>
-
+  <div id="flash-container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
   <script src="../static/script.js"></script>
 </body>
 </html>
