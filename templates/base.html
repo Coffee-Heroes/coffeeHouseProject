@@ -11,10 +11,10 @@
   <header class="hero-header">
     <div class="auth-buttons">
       {% if current_user.is_authenticated %}
-      <a href="{{ url_for('logout') }}" class="auth-btn">Вийти</a>
-        <!-- {% if current_user.role == 'admin' %}
+        {% if current_user.role == RoleEnum.ADMIN %}
         <a href="#" class="auth-btn" data-modal="add_order">Додати блюдо</a>
-        {% endif %} -->
+        {% endif %}
+      <a href="{{ url_for('logout') }}" class="auth-btn">Вийти</a>
       {% else %}
       <a href="{{ url_for('login') }}" class="auth-btn" data-modal="login">Увійти</a>
       <a href="{{ url_for('register') }}" class="auth-btn" data-modal="register">Зареєструватися</a>
@@ -80,6 +80,12 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
+  
+    {% for field, errors in registration_form.errors.items() %}
+      {% for error in errors %}
+        <div class="flash-message">{{ error }}</div>
+      {% endfor %}
+    {% endfor %}
   </div>
   <script src="../static/script.js"></script>
 </body>

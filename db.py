@@ -6,7 +6,7 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo('password')])
+    confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo('password', message="Password in confirm field must be equal to your password")])
     submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
