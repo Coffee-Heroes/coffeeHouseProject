@@ -1,12 +1,13 @@
+from flask_login import current_user
+from flask_login import LoginManager, login_user, logout_user
 import os
+from decouple import config
 import json
-from flask import Flask, render_template, redirect, url_for, flash, session, request
+from flask import Flask, render_template, redirect, url_for, flash, session
 from models import db, User, Order
 from db import RegistrationForm, LoginForm, OrderForm
 from models import RoleEnum
-from flask_login import LoginManager, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from decouple import config
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
@@ -26,7 +27,7 @@ def load_user(user_id):
 def base():
     login_form = LoginForm()
     registration_form = RegistrationForm()
-    return render_template("base.html", login_form=login_form, registration_form=registration_form)
+    return render_template("base.html", login_form=login_form, registration_form=registration_form, RoleEnum=RoleEnum)
 
 
 @app.route("/login", methods=["POST"])
@@ -52,28 +53,37 @@ def register():
         existing_user = User.query.filter_by(email=registration_form.email.data).first()
         if existing_user:
             flash("Email already registered")
+            return redirect(url_for("base"))
         else:
+            email = registration_form.email.data
             username = registration_form.username.data
             role = RoleEnum.USER
             password=registration_form.password.data
-            confirm=registration_form.password.data
+            confirm=registration_form.confirm.data
+            
+            if not email.endswith('@gmail.com'):
+                flash('Please, use your google email')
+                return redirect(url_for('base'))
             
             if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
                 role = RoleEnum.ADMIN
 
             if password != confirm:
                 flash('Passwords must be equal')
+                return redirect(url_for('base'))
                 
             new_user = User(
                 username=username,
-                email=registration_form.email.data,
+                email=email,
                 password=generate_password_hash(password),
                 role=role
             )
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user, remember=True)
             session['username'] = new_user.username
             flash("You’ve been registered successfully!")
+            print('ok')
             return redirect(url_for('base'))
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
@@ -99,18 +109,25 @@ def create_order():
         db.session.add(new_order)
         db.session.commit()
         flash('Your order has been created successfully!')
+        if current_user.is_authenticated:
+          print('auth')
+        else:
+          print('not')
         return redirect(url_for('profile'))
     return render_template('create_order.html', form=form)
 
-@app.route('/profile', methods=["GET", "POST"])
+@app.route("/profile")
 def profile():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    return f"Welcome, {session['username']}!"
+    if current_user.is_authenticated:
+        return f"Welcome, {current_user.username}!"
+    else:
+        return redirect(url_for('base'))
 
-@app.route('/logout')
+@app.route("/logout", methods=['GET', 'POST'])
 def logout():
     logout_user()
+    return redirect(url_for("base"))
+    
 
 @app.route("/about/")
 def about():

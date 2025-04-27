@@ -5,3 +5,4 @@ email-validator
 python-decouple
 werkzeug
 decouple
+flask-login
