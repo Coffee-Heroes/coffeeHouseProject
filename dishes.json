@@ -1,1 +1,72 @@
-
+[
+  {
+    "id": 1,
+    "name": "Наполеон",
+    "description": "класичний хрусткий десерт із лохиною.",
+    "price": "215 грн",
+    "image": "https://gastroloft.com.ua/wp-content/uploads/2022/02/napoleon-gastroloft.png"
+  },
+  {
+    "id": 2,
+    "name": "Фісташкове тірамісу",
+    "description": "з фісташками, лимоном і присипкою з молотої фісташки. Подається в келиху.",
+    "price": "230 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-olio-pizza/menu/LCJtIRH-bsfGjaP-WICcVtC.jpeg.webp"
+  },
+  {
+    "id": 3,
+    "name": "Шоколадний фондан",
+    "description": "із розтопленим шоколадом всередині, подаємо з кулькою морозива та покриваємо вишневим соусом.",
+    "price": "190 грн",
+    "image": "https://images.unian.net/photos/2020_12/thumb_files/1200_0_1608796072-3763.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Яблучний струдель",
+    "description": "зі хрусткового тіста, свіжими яблуками, ароматної кориці і родзинками.Подається з кулькою морозива та м'ятою.",
+    "price": "170 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-olio-pizza/menu/RlmYFYv-yPmFLyg-sAkJVWF.webp"
+  },
+  {
+    "id": 5,
+    "name": "Шоколадний брауні",
+    "description": "з морозивом, горіховою крихтою і карамелізованим яблуком.",
+    "price": "265 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-olio-pizza/menu/hhMaDOJ-HuXOIeN-LJLtuaT.jpeg.webp"
+  },
+  {
+    "id": 6,
+    "name": "Фісташковий чізкейк",
+    "description": "на основі масляного печива з натуральною фісташковою пастою.",
+    "price": "245 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-terrace-sea-view/menu/vYCievN-DshpgPD-lhjDteY.webp"
+  },
+  {
+    "id": 7,
+    "name": "Тістечко Снікерс",
+    "description": "в основі фундук і кеш'ю, всередені - кокосове молоко, фінікова карамель та арахіс",
+    "price": "150 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-terrace-sea-view/menu/DfONDAh-irCoIRV-fQkbJbF.webp"
+  },
+  {
+    "id": 8,
+    "name": "Шу",
+    "description": "пухке тістечко із заварним кремом всередені, прикрашаємо шоколадом.",
+    "price": "120 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-theroasterybyodessa/menu/yEyRSYr-kVlGyAa-CWYfXVk.webp"
+  },
+  {
+    "id": 9,
+    "name": "Сирники",
+    "description": "гарячі і хрусткі зі сметаною ",
+    "price": "110 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-restoran-taras/menu/GRFMgIw-qlYxple-PMWqpWf.jpeg.webp"
+  },
+  {
+    "id": 10,
+    "name": "Київський торт",
+    "description": "посипаємо горіховою крихтою, подрібненим безе та тертим шоколадом",
+    "price": "265 грн",
+    "image": "https://cdn-media.choiceqr.com/prod-eat-khutoretsnadnipri/menu/uGaDPkK-falmIGn-mJQIRUn.jpeg.webp"
+  }
+]
