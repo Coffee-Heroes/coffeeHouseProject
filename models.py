@@ -25,6 +25,13 @@ class Order(db.Model):
     delivery_address = db.Column(db.String(200), nullable=True)
     comment = db.Column(db.String(200), nullable=True)
     status = db.Column(db.String(50), default='Pending')
+
+class Dish(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.String(10), nullable=False)
+    image = db.Column(db.Blob, nullable=False)
     
     
     
