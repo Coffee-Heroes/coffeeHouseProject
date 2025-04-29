@@ -4,8 +4,8 @@ import os
 from decouple import config
 import json
 from flask import Flask, render_template, redirect, url_for, flash, session
-from models import db, User, Order
-from db import RegistrationForm, LoginForm, OrderForm
+from models import db, User, Order, Dish
+from db import RegistrationForm, LoginForm, OrderForm, AddDishForm
 from models import RoleEnum
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -83,7 +83,6 @@ def register():
             login_user(new_user, remember=True)
             session['username'] = new_user.username
             flash("You’ve been registered successfully!")
-            print('ok')
             return redirect(url_for('base'))
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
@@ -136,11 +135,30 @@ def about():
 
 @app.route("/menu/")
 def menu():
-    with open("dishes.json", "r", encoding="utf-8") as json_file: # прогружает json чтобы взять оттуда блюда и поместить в menu.html
-        data = json.load(json_file)
-        return render_template("menu.html", data=data)
+    form = AddDishForm()
+    return render_template("menu.html", form=form, RoleEnum=RoleEnum)
 
-
+@app.route("/add_dish", methods=['GET', 'POST'])
+def add_dish():
+    form = AddDishForm()
+    if form.validate_on_submit():
+        type = form.type.data
+        name = form.name.data
+        description = form.description.data
+        price = form.price.data
+        image = form.image.data
+        
+        new_dish = Dish(
+            type = type,
+            name = name,
+            description = description,
+            price = price,
+            image = image
+        )
+        db.session.add(new_dish)
+        db.session.commit()
+        return redirect(url_for('menu'))
+    return render_template('menu.html', form=form, RoleEnum=RoleEnum)
 @app.route("/reviews/")
 def reviews():
     return render_template("reviews.html")

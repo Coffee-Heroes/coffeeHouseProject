@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from enum import Enum
 from sqlalchemy import Enum as SqlEnum
+from sqlalchemy import LargeBinary
 from flask_login import UserMixin
 
 db = SQLAlchemy()
@@ -28,10 +29,11 @@ class Order(db.Model):
 
 class Dish(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String, nullable=True)
     name = db.Column(db.String(40), nullable=False)
-    description = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(200))
     price = db.Column(db.String(10), nullable=False)
-    image = db.Column(db.Blob, nullable=False)
+    image = db.Column(LargeBinary, nullable=False)
     
     
     

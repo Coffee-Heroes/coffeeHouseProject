@@ -69,6 +69,23 @@ body, html {
   z-index: 2;
 }
 
+.auth-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: #c9a46c;
+  color: black;
+  border-color: #c9a46c;
+}
+
 .modal {
   position: fixed;
   top: 0; left: 0;
