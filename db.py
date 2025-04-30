@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, TextAreaField, SelectField, FileField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, TextAreaField, RadioField, FileField
 from wtforms.validators import DataRequired, EqualTo
 from flask_wtf.file import FileRequired, FileAllowed
 
@@ -23,12 +23,12 @@ class OrderForm(FlaskForm):
     submit = SubmitField('Create Order')
     
 class AddDishForm(FlaskForm):
-    type = SelectField('Type of dish', choices=[
-        ('Drink', 'drink'),
-        ('Food', 'food')
+    type = RadioField('Вид блюда', choices=[
+        ('Напій', 'drink'),
+        ('Їжа', 'food')
     ], validators=[DataRequired()])
     name = StringField('Name of dish', validators=[DataRequired()])
     description = TextAreaField('Description of dish')
     price = IntegerField('Price of dish', validators=[DataRequired()])
-    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Dont support this file extension')])
+    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Таке розширення файла не підтримується')])
     submit = SubmitField('Add a new dish')

@@ -19,18 +19,15 @@
       rel="stylesheet"
     />
   </head>
-  <body>
-    <header class="upper-header">
-      <div class="auth-buttons">
-        {% if current_user.role == RoleEnum.ADMIN %}
-        <a href="{{ url_for('add_dish') }}" class="auth-btn" data-modal="adddish">Додати блюдо</a>
-        {% endif %}
-      </div>
+    <header class="upper-header">{% include 'authbtns.html' %}</header>
+
+    <body>
       <div class="overlay-menu"></div>
+
       <div class="header-menu">
+
         <h1>Menu</h1>
         <div class="block"></div>
-
         <div class="container-fluid">
           <div class="row">
             {% for file in data %}
@@ -58,29 +55,53 @@
             {%endfor%}
           </div>
         </div>
+
       </div>
-    </header>
 
-    <div id="adddish-modal" class="modal hidden">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Створення блюда</h2>
-        <form action="{{ url_for('add_dish') }}", method="POST">
-          {{ form.hidden_tag() }}
-          {% for type in form.type %}
-            {{ type() }} {{ type.label }}
-          {% endfor %}
-          {{ form.name(placeholder='Name of dish') }}
-          {{ form.description(placeholder='Description of dish') }}
-          {{ form.price.lavel }} {{ form.price(type='number') }}
-          {{ form.image.label }} {{ form.image() }}
-          {{ form.submit(class=btn) }}
-        </form>
+      {% include 'modals.html' %}
+
+      <div id="adddish-modal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
+          <h2>Створення блюда</h2>
+          <form action="{{ url_for('add_dish') }}" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+              <label class="form-label">{{ form.type.label }}</label>
+              <div class="radio-group">
+                {% for subfield in form.type %}
+                  <label>{{ subfield() }} {{ subfield.label.text }}</label>
+                {% endfor %}
+              </div>
+            </div>
+
+            <input type="text" name="name" placeholder="Назва блюда" required>
+
+            <textarea name="description" placeholder="Опис блюда"></textarea>
+
+            <input type="text" name="price" placeholder="Ціна(грн)" min="0" step="any" required>
+
+            <div class="form-group">
+              <label>Зображення блюда</label><br>
+              <input type="file" name="image" id="fileInput" class="file-input">
+            </div>
+
+            <input type="submit" class="btn" value="Додати блюдо">
+          </form>
+        </div>
       </div>
-    </div>
+      <div id="flash-container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+      <script src="../static/script.js"></script>
+    </body>
 
 
-
-    <script src="../static/script.js"></script>
-  </body>
 </html>

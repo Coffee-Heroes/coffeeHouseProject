@@ -2,12 +2,12 @@ from flask_login import current_user
 from flask_login import LoginManager, login_user, logout_user
 import os
 from decouple import config
-import json
 from flask import Flask, render_template, redirect, url_for, flash, session
 from models import db, User, Order, Dish
 from db import RegistrationForm, LoginForm, OrderForm, AddDishForm
 from models import RoleEnum
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
@@ -135,8 +135,10 @@ def about():
 
 @app.route("/menu/")
 def menu():
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
     form = AddDishForm()
-    return render_template("menu.html", form=form, RoleEnum=RoleEnum)
+    return render_template("menu.html", form=form, registration_form=reg_form, login_form=log_form, RoleEnum=RoleEnum)
 
 @app.route("/add_dish", methods=['GET', 'POST'])
 def add_dish():
@@ -147,6 +149,12 @@ def add_dish():
         description = form.description.data
         price = form.price.data
         image = form.image.data
+        if image:
+            filename = secure_filename(image.filename)
+            allowed_extensions = ['jpg', 'jpeg', 'png']
+            if filename.split('.')[-1].lower() not in allowed_extensions:
+                flash("Такий тип файлів не підтримується.", 'danger')
+                return redirect(url_for('menu'))
         
         new_dish = Dish(
             type = type,

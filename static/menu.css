@@ -9,12 +9,10 @@ body, html {
   position: relative;
   background-size: cover;
   background-position: center;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  z-index: 1;
+  height: auto;
+  padding: 20px 0;
   background: #a8967c;
+  z-index: 1;
 }
 
 .overlay-menu {
@@ -106,7 +104,7 @@ body, html {
   color: #333;
   padding: 30px;
   border-radius: 20px;
-  width: 300px;
+  width: 500px;
   text-align: center;
   position: relative;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -149,6 +147,56 @@ body, html {
   cursor: pointer;
 }
 
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* .form-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+} */
+
+.radio-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  font-style: italic;
+  font-weight: normal;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #c9a46c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #b38e57;
+}
+
+textarea {
+  width: 90%;
+  height: 80px;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
 .auth-btn2 {
   background-color: #c9a46a;
   border: 2px solid white;
@@ -179,9 +227,11 @@ body, html {
 }
 
 .header-menu {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   z-index: 1;
-  max-width: 1500px;
   padding: 20px;
 }
 
@@ -196,16 +246,23 @@ body, html {
 
 .block {
   border-bottom: 3px #c9a46c solid;
-  width: 1455px;
+  width: 80%;
+  max-width: 1000px;
+  margin: 0 auto 30px auto;
+}
+
+.container-fluid {
+  max-width: 1400px;
+  margin: auto;
 }
 
 .card {
   width: 16rem;
-  margin: 5px;
-  padding: 0px;
+  margin: 10px;
+  padding: 0;
 }
 
-.list-item-image { /* настройки картинок в карточках */
+.list-item-image {
   height: 180px;
   padding: 0px;
   border-color: #c9a46c;
@@ -226,9 +283,7 @@ body, html {
 }
 
 .row {
-  margin-left: 50px;
-  margin-right: 20px;
-  position: center;
+  justify-content: center;
 }
 
 .card-value {

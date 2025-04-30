@@ -1,0 +1,13 @@
+<div class="auth-buttons">
+  {% if current_user.is_authenticated %}
+    {% if current_user.role == RoleEnum.ADMIN %}
+      <a href="{{ url_for('add_dish') }}" class="auth-btn" data-modal="adddish">Додати Блюдо</a>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="auth-btn">Вийти</a>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="auth-btn" data-modal="login">Увійти</a>
+    <a href="{{ url_for('register') }}" class="auth-btn" data-modal="register">Зареєструватися</a>
+  {% endif %}
+</div>
+
+
