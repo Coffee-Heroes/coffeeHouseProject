@@ -3,10 +3,10 @@
     <span class="close-btn">&times;</span>
     <h2>Увійти</h2>
     <form action="{{ url_for('login') }}" , method="POST">
-      {{ login_form.hidden_tag() }} 
-      {{ login_form.email(placeholder='Email') }}
-      {{ login_form.password(placeholder='Password') }} 
-      {{login_form.submit(class='btn') }}
+      {{ log_form.hidden_tag() }} 
+      {{ log_form.email(placeholder='Email') }}
+      {{ log_form.password(placeholder='Password') }} 
+      {{ log_form.submit(class='btn') }}
     </form>
     <p>
       Ще не маєш акаунту?
@@ -20,16 +20,68 @@
     <span class="close-btn">&times;</span>
     <h2>Реєстрація</h2>
     <form action="{{ url_for('register') }}" , method="POST">
-      {{registration_form.hidden_tag() }} 
-      {{registration_form.username(placeholder='Username') }} 
-      {{registration_form.email(placeholder='Email') }} 
-      {{registration_form.password(placeholder='Password') }} 
-      {{registration_form.confirm(placeholder='Confirm password') }} 
-      {{registration_form.submit(class='btn') }}
+      {{reg_form.hidden_tag() }} 
+      {{reg_form.username(placeholder='Username') }} 
+      {{reg_form.email(placeholder='Email') }} 
+      {{reg_form.password(placeholder='Password') }} 
+      {{reg_form.confirm(placeholder='Confirm password') }} 
+      {{reg_form.submit(class='btn') }}
     </form>
     <p>
       Вже маєш акаунт?
       <a href="#" class="switch-modal" data-modal="login">Увійти</a>
     </p>
   </div>
+</div>
+
+<div id="adddish-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Створення блюда</h2>
+        <form action="{{ url_for('add_dish') }}" method="POST" enctype="multipart/form-data">
+            {{ add_dish_form.hidden_tag() }}
+
+            <div class="form-group">
+                <label class="form-label">{{ add_dish_form.type.label }}</label>
+                <div class="radio-group">
+                {% for subfield in add_dish_form.type %}
+                    <label>{{ subfield() }} {{ subfield.label.text }}</label>
+                {% endfor %}
+                </div>
+            </div>
+
+            <input type="text" name="name" placeholder="Назва блюда" required>
+
+            <textarea name="description" placeholder="Опис блюда"></textarea>
+
+            <input type="text" name="price" placeholder="Ціна(грн)" min="0" step="any" required>
+
+            <div class="form-group">
+                <label>Зображення блюда</label><br>
+                <input type="file" name="image" id="fileInput" class="file-input">
+            </div>
+
+            <input type="submit" class="btn" value="Додати блюдо">
+        </form>
+    </div>
+</div>
+
+<div id="order-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Замовлення</h2>
+        <form action="{{ url_for('create_order') }}" method="POST" enctype="multipart/form-data">
+            {{ order_form.hidden_tag() }}
+
+            <input type="hidden" name="product_id" id="modal-product-id">
+
+            <input type="text" name="quantity" placeholder="Кількість" min="0" step="any" required>
+
+            <input type="text" name="delivery_adress" placeholder="Адреса доставки">
+
+            <textarea name="comment" placeholder="Коментар"></textarea>
+
+            <input type="submit" class="btn" value="Замовити">
+        </form>
+    </div>
 </div>

@@ -9,6 +9,7 @@
 <body>
   
   <header class="hero-header">
+    
     {% include 'authbtns.html' %}
 
     <div class="overlay"></div>
@@ -28,21 +29,8 @@
 
   {% include 'modals.html'%}
 
-  <div id="flash-container">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="flash-message">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  
-    {% for field, errors in registration_form.errors.items() %}
-      {% for error in errors %}
-        <div class="flash-message">{{ error }}</div>
-      {% endfor %}
-    {% endfor %}
-  </div>
+  {% include 'flashes.html' %}
+
   <script src="../static/script.js"></script>
 </body>
 </html>

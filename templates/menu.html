@@ -19,35 +19,69 @@
       rel="stylesheet"
     />
   </head>
-    <header class="upper-header">{% include 'authbtns.html' %}</header>
+    <header class="upper-header">
+      {% include 'authbtns.html' %}
+    </header>
 
     <body>
       <div class="overlay-menu"></div>
 
       <div class="header-menu">
-
         <h1>Menu</h1>
         <div class="block"></div>
         <div class="container-fluid">
+          <h2>Їжа</h2>
           <div class="row">
-            {% for file in data %}
-            <div class="card">
+            {% for item in food %}
+            <div class="card col-md-3 mb-4">
               <div class="card-body">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item list-item-image">
                     <img
-                      src="{{ file.image }}"
+                      src="data:{{ item.image_mime }};base64,{{ item.image | b64encode }}"
                       class="card-img-top list-image"
                     />
                   </li>
                   <li class="list-group-item list-item-title">
-                    <h5 class="card-text">{{ file.name }}</h5>
+                    <h5 class="card-text">{{ item.name }}</h5>
                   </li>
                   <li class="list-group-item list-item-des">
-                    <p class="card-text">{{ file.description }}</p>
+                    <p class="card-text">{{ item.description }}</p>
                   </li>
                   <li class="list-group-item list-item-price">
-                    <p class="card-subtitle card-value">{{ file.price }}</p>
+                    <p class="card-subtitle card-value">{{ item.price }} грн.</p>
+                  </li>
+                  <li class="list-group-item list-item-order">
+                     <a href="{{ url_for('create_order') }}" class="order-link" data-modal="order" data-product-id="{{ item.id }}">Замовити</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+          <h2>Напої</h2>
+          <div class="row">
+            {% for item in drinks %}
+            <div class="card col-md-3 mb-4">
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item list-item-image">
+                    <img
+                      src="data:{{ item.image_mime }};base64,{{ item.image | b64encode }}"
+                      class="card-img-top list-image"
+                    />
+                  </li>
+                  <li class="list-group-item list-item-title">
+                    <h5 class="card-text">{{ item.name }}</h5>
+                  </li>
+                  <li class="list-group-item list-item-des">
+                    <p class="card-text">{{ item.description }}</p>
+                  </li>
+                  <li class="list-group-item list-item-price">
+                    <p class="card-subtitle card-value">{{ item.price }} грн.</p>
+                  </li>
+                  <li class="list-group-item list-item-order">
+                    <a href="{{ url_for('create_order') }}" class="order-link" data-modal="order" data-product-id="{{ item.id }}">Замовити</a>
                   </li>
                 </ul>
               </div>
@@ -55,51 +89,12 @@
             {%endfor%}
           </div>
         </div>
-
       </div>
 
       {% include 'modals.html' %}
 
-      <div id="adddish-modal" class="modal hidden">
-        <div class="modal-content">
-          <span class="close-btn">&times;</span>
-          <h2>Створення блюда</h2>
-          <form action="{{ url_for('add_dish') }}" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
+      {% include 'flashes.html' %}
 
-            <div class="form-group">
-              <label class="form-label">{{ form.type.label }}</label>
-              <div class="radio-group">
-                {% for subfield in form.type %}
-                  <label>{{ subfield() }} {{ subfield.label.text }}</label>
-                {% endfor %}
-              </div>
-            </div>
-
-            <input type="text" name="name" placeholder="Назва блюда" required>
-
-            <textarea name="description" placeholder="Опис блюда"></textarea>
-
-            <input type="text" name="price" placeholder="Ціна(грн)" min="0" step="any" required>
-
-            <div class="form-group">
-              <label>Зображення блюда</label><br>
-              <input type="file" name="image" id="fileInput" class="file-input">
-            </div>
-
-            <input type="submit" class="btn" value="Додати блюдо">
-          </form>
-        </div>
-      </div>
-      <div id="flash-container">
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="flash-message">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-      </div>
       <script src="../static/script.js"></script>
     </body>
 

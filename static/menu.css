@@ -153,12 +153,6 @@ body, html {
   font-weight: bold;
 }
 
-/* .form-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 8px;
-} */
-
 .radio-group {
   display: flex;
   gap: 1rem;
@@ -289,6 +283,42 @@ textarea {
 .card-value {
   font-family: "Segoe UI";
   color: #c9a46c;
+}
+
+.order-link {
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
+.order-link:hover {
+  background-color: #146c43;
+}
+
+#flash-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.flash-message {
+  background-color: #fff;
+  color: #444;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: fadeInOut 4s forwards;
+  font-family: sans-serif;
 }
 
 @keyframes fadeIn {
