@@ -2,6 +2,7 @@ const authButtons = document.querySelectorAll(".auth-btn");
 const modals = document.querySelectorAll(".modal");
 const closeBtns = document.querySelectorAll(".close-btn");
 const switchLinks = document.querySelectorAll(".switch-modal");
+const orderLinks = document.querySelectorAll(".order-link");
 
 
 authButtons.forEach(button => {
@@ -24,6 +25,15 @@ switchLinks.forEach(link => {
   });
 });
 
+orderLinks.forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const modalId = link.dataset.modal;
+    const productId = link.dataset.productId;
+    openModal(modalId, productId);
+  });
+});
+
 
 closeBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -41,8 +51,13 @@ window.addEventListener("click", e => {
 });
 
 
-function openModal(id) {
-  document.getElementById(`${id}-modal`).classList.remove("hidden");
+function openModal(id, productId = null) {
+  const modal = document.getElementById(`${id}-modal`);
+  if (productId) {
+    const input = document.getElementById("modal-product-id");
+    if (input) input.value = productId;
+  }
+  modal.classList.remove("hidden");
 }
 
 

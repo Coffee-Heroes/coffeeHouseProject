@@ -24,11 +24,11 @@ class OrderForm(FlaskForm):
     
 class AddDishForm(FlaskForm):
     type = RadioField('Вид блюда', choices=[
-        ('Напій', 'drink'),
-        ('Їжа', 'food')
+        ('drink', 'Напій'),
+        ('food', 'Їжа')
     ], validators=[DataRequired()])
     name = StringField('Name of dish', validators=[DataRequired()])
     description = TextAreaField('Description of dish')
     price = IntegerField('Price of dish', validators=[DataRequired()])
-    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Таке розширення файла не підтримується')])
+    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg', 'webp'], message='Таке розширення файла не підтримується')])
     submit = SubmitField('Add a new dish')

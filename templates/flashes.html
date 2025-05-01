@@ -1,0 +1,21 @@
+<div id="flash-container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% for field, errors in reg_form.errors.items() %}
+        {% for error in errors %}
+            <div class="flash-message">{{ error }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {% for field, errors in add_dish_form.errors.items() %}
+        {% for error in errors %}
+            <div class="flash-message">{{ error }}</div>
+        {% endfor %}
+    {% endfor %}
+</div>
