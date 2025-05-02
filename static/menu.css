@@ -276,6 +276,12 @@ textarea {
   border-color: #c9a46c;
 }
 
+.list-drink-des {
+  height: 70px;
+  text-align: left;
+  border-color: #c9a46c;
+}
+
 .row {
   justify-content: center;
 }
