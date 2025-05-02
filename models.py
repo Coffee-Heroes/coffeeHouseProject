@@ -38,3 +38,9 @@ class Dish(db.Model):
     description = db.Column(db.String(200))
     price = db.Column(db.String(10), nullable=False)
     image = db.Column(LargeBinary, nullable=False)
+    
+    
+    
+
+
+

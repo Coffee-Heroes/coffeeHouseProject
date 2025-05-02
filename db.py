@@ -8,8 +8,7 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo(
-        'password', message="Password in confirm field must be equal to your password")])
+    confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo('password', message="Password in confirm field must be equal to your password")])
     submit = SubmitField('Register')
 
 
@@ -35,6 +34,5 @@ class AddDishForm(FlaskForm):
     name = StringField('Name of dish', validators=[DataRequired()])
     description = TextAreaField('Description of dish')
     price = IntegerField('Price of dish', validators=[DataRequired()])
-    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(
-        ['jpg', 'png', 'jpeg'], 'Таке розширення файла не підтримується')])
+    image = FileField('Image of dish', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Таке розширення файла не підтримується')])
     submit = SubmitField('Add a new dish')

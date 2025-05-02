@@ -2,14 +2,14 @@
   {
     "id": 1,
     "name": "Наполеон",
-    "description": "класичний хрусткий десерт із лохиною.",
+    "description": "Класичний хрусткий десерт із лохиною.",
     "price": "215 грн",
     "image": "https://gastroloft.com.ua/wp-content/uploads/2022/02/napoleon-gastroloft.png"
   },
   {
     "id": 2,
     "name": "Фісташкове тірамісу",
-    "description": "з фісташками, лимоном і присипкою з молотої фісташки. Подається в келиху.",
+    "description": "З фісташками, лимоном і присипкою з молотої фісташки. Подається в келиху.",
     "price": "230 грн",
     "image": "https://cdn-media.choiceqr.com/prod-eat-olio-pizza/menu/LCJtIRH-bsfGjaP-WICcVtC.jpeg.webp"
   },
