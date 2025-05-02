@@ -2,12 +2,12 @@ from flask_login import current_user
 from flask_login import LoginManager, login_user, logout_user
 import os
 from decouple import config
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from models import db, User, Order, Dish
 from db import RegistrationForm, LoginForm, OrderForm, AddDishForm
 from models import RoleEnum
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
+import base64
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
@@ -25,56 +25,64 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.template_filter('b64encode')
+def b64encode_filter(data: bytes) -> str:
+    return base64.b64encode(data).decode('utf-8')
+
+
 @app.route("/", methods=["GET"])
 def base():
-    login_form = LoginForm()
-    registration_form = RegistrationForm()
-    return render_template("base.html", login_form=login_form, registration_form=registration_form, RoleEnum=RoleEnum)
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    order_form = OrderForm()
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/login", methods=["POST"])
 def login():
-    login_form = LoginForm()
-    registration_form = RegistrationForm()
-    if login_form.validate_on_submit():
-        user = User.query.filter_by(email=login_form.email.data).first()
-        if user and check_password_hash(user.password, login_form.password.data):  # ❗️рекомендується юзати hashing
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    order_form = OrderForm()
+    if log_form.validate_on_submit():
+        user = User.query.filter_by(email=log_form.email.data).first()
+        if user and check_password_hash(user.password, log_form.password.data):
             login_user(user, remember=True)
             session['username'] = user.username
             flash("You’ve been signed in successfully!")
             return redirect(url_for('base'))
         else:
             flash("Invalid credentials")
-    return render_template("base.html", login_form=login_form, registration_form=registration_form)
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    login_form = LoginForm()
-    registration_form = RegistrationForm()
-    if registration_form.validate_on_submit():
-        existing_user = User.query.filter_by(email=registration_form.email.data).first()
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    order_form = OrderForm()
+    if reg_form.validate_on_submit():
+        existing_user = User.query.filter_by(email=reg_form.email.data).first()
         if existing_user:
             flash("Email already registered")
             return redirect(url_for("base"))
         else:
-            email = registration_form.email.data
-            username = registration_form.username.data
+            email = reg_form.email.data
+            username = reg_form.username.data
             role = RoleEnum.USER
-            password = registration_form.password.data
-            confirm = registration_form.confirm.data
-            
+            password = reg_form.password.data
+
             if not email.endswith('@gmail.com'):
                 flash('Please, use your google email')
                 return redirect(url_for('base'))
-            
+
             if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
                 role = RoleEnum.ADMIN
 
-            if password != confirm:
-                flash('Passwords must be equal')
-                return redirect(url_for('base'))
-                
             new_user = User(
                 username=username,
                 email=email,
@@ -87,93 +95,97 @@ def register():
             session['username'] = new_user.username
             flash("You’ve been registered successfully!")
             return redirect(url_for('base'))
-    return render_template("base.html", login_form=login_form, registration_form=registration_form)
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
-    form = OrderForm()
-    if form.validate_on_submit():
-        if 'username' not in session:
+    order_form = OrderForm()
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    if order_form.validate_on_submit():
+        if not current_user.is_authenticated:
             flash('You need to log in first.')
             return redirect(url_for('login'))
-        
-        # Получаем текущего пользователя из сессии
+
         user = User.query.filter_by(username=session['username']).first()
 
-        # Создаём новый заказ
         new_order = Order(
-            product_name=form.product_name.data,
-            quantity=form.quantity.data,
+            product_id=request.form.get('product_id'),
+            quantity=order_form.quantity.data,
             customer_id=user.id,
-            delivery_address=form.delivery_address.data,
-            comment=form.comment.data
+            delivery_address=order_form.delivery_address.data,
+            comment=order_form.comment.data
         )
         db.session.add(new_order)
         db.session.commit()
         flash('Your order has been created successfully!')
-        if current_user.is_authenticated:
-            print('auth')
-        else:
-            print('not')
-        return redirect(url_for('profile'))
-    return render_template('create_order.html', form=form)
-
-
-@app.route("/profile")
-def profile():
-    if current_user.is_authenticated:
-        return f"Welcome, {current_user.username}!"
-    else:
-        return redirect(url_for('base'))
+        return redirect(url_for('menu'))
+    return render_template('menu.html', order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
     logout_user()
     return redirect(url_for("base"))
-    
+
 
 @app.route("/about/")
 def about():
-    return render_template("about.html")
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    order_form = OrderForm()
+    return render_template("about.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/menu/")
 def menu():
+    order_form = OrderForm()
     reg_form = RegistrationForm()
     log_form = LoginForm()
-    form = AddDishForm()
-    return render_template("menu.html", form=form, registration_form=reg_form, login_form=log_form, RoleEnum=RoleEnum)
+    add_dish_form = AddDishForm()
+
+    drinks = Dish.query.filter_by(type='drink').all()
+    food = Dish.query.filter_by(type='food').all()
+
+    return render_template("menu.html", order_form=order_form, drinks=drinks, food=food, log_form=log_form,
+                           reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/add_dish", methods=['GET', 'POST'])
 def add_dish():
-    form = AddDishForm()
-    if form.validate_on_submit():
-        type = form.type.data
-        name = form.name.data
-        description = form.description.data
-        price = form.price.data
-        image = form.image.data
-        if image:
-            filename = secure_filename(image.filename)
-            allowed_extensions = ['jpg', 'jpeg', 'png']
-            if filename.split('.')[-1].lower() not in allowed_extensions:
-                flash("Такий тип файлів не підтримується.", 'danger')
-                return redirect(url_for('menu'))
-        
+    reg_form = RegistrationForm()
+    log_form = LoginForm()
+    add_dish_form = AddDishForm()
+    order_form = OrderForm()
+    if add_dish_form.validate_on_submit():
+        type = add_dish_form.type.data
+        name = add_dish_form.name.data
+        description = add_dish_form.description.data
+        price = add_dish_form.price.data
+        image_file = add_dish_form.image.data
+        image_mime = image_file.mimetype
+
+        image_bytes = image_file.read()
+
         new_dish = Dish(
             type=type,
             name=name,
             description=description,
             price=price,
-            image=image
+            image=image_bytes,
+            image_mime=image_mime
         )
         db.session.add(new_dish)
         db.session.commit()
         return redirect(url_for('menu'))
-    return render_template('menu.html', form=form, RoleEnum=RoleEnum)
+    return render_template('menu.html', order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/reviews/")
@@ -189,5 +201,4 @@ def page_not_found(e):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        print("Database tables created!")
-        app.run(port=3001, debug=False)
+    app.run(port=3001, debug=True)
