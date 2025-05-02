@@ -70,25 +70,25 @@ def register():
             role = RoleEnum.USER
             password=reg_form.password.data
             
-            if not email.endswith('@gmail.com'):
-                flash('Please, use your google email')
+            if email.endswith('@gmail.com') or email.endswith('@ukr.net'):         
+                if email == 'coffeeHeroes@ukr.net':
+                    role = RoleEnum.ADMIN
+                    
+                new_user = User(
+                    username=username,
+                    email=email,
+                    password=generate_password_hash(password),
+                    role=role
+                )
+                db.session.add(new_user)
+                db.session.commit()
+                login_user(new_user, remember=True)
+                session['username'] = new_user.username
+                flash("You’ve been registered successfully!")
                 return redirect(url_for('base'))
-            
-            if username in ['Semen', 'Andrew', 'Sviatoslav', 'Ivan']:
-                role = RoleEnum.ADMIN
-                
-            new_user = User(
-                username=username,
-                email=email,
-                password=generate_password_hash(password),
-                role=role
-            )
-            db.session.add(new_user)
-            db.session.commit()
-            login_user(new_user, remember=True)
-            session['username'] = new_user.username
-            flash("You’ve been registered successfully!")
-            return redirect(url_for('base'))
+            else:
+                flash('Please, use your google or ukr.net email')
+                return redirect(url_for('base'))
     return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 @app.route('/create_order', methods=['GET', 'POST'])
@@ -97,19 +97,21 @@ def create_order():
     reg_form = RegistrationForm()
     log_form = LoginForm()
     add_dish_form = AddDishForm()
+    print("PRODUCT ID:", order_form.product_id.data)
     if order_form.validate_on_submit():
-        if not current_user.is_authenticated:
-            flash('You need to log in first.')
-            return redirect(url_for('login'))
-        
-        user = User.query.filter_by(username=session['username']).first()
+        print("Received product ID:", product_id)
+        product_id = order_form.product_id.data
+        quantity = order_form.quantity.data
+        customer_id = current_user.id 
+        delivery_address = order_form.delivery_address.data
+        comment = order_form.comment.data
 
         new_order = Order(
-            product_id=request.form.get('product_id'),
-            quantity=order_form.quantity.data,
-            customer_id=user.id,
-            delivery_address=order_form.delivery_address.data,
-            comment=order_form.comment.data
+            product_id = product_id,
+            quantity = quantity,
+            customer_id = customer_id,
+            delivery_address = delivery_address,
+            comment = comment
         )
         db.session.add(new_order)
         db.session.commit()
@@ -123,7 +125,7 @@ def logout():
     return redirect(url_for("base"))
     
 
-@app.route("/about/")
+@app.route("/about")
 def about():
     reg_form = RegistrationForm()
     log_form = LoginForm()
@@ -132,7 +134,7 @@ def about():
     return render_template("about.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
-@app.route("/menu/")
+@app.route("/menu")
 def menu():
     order_form = OrderForm()
     reg_form = RegistrationForm()
@@ -173,13 +175,13 @@ def add_dish():
         db.session.commit()
         return redirect(url_for('menu'))
     return render_template('menu.html',order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
-@app.route("/reviews/")
+@app.route("/reviews")
 def reviews():
     return render_template("reviews.html")
 
 
 @app.errorhandler(404) 
-def page_not_found():
+def page_not_found(e):
     return render_template("404.html"), 404
 
 

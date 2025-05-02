@@ -140,8 +140,8 @@ html {
   color: #333;
   padding: 30px;
   border-radius: 20px;
-  width: 300px;
-  text-align: center;
+  width: 500px;
+  text-align: center; 
   position: relative;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.4s ease;

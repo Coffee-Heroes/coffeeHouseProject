@@ -50,18 +50,16 @@
                 </div>
             </div>
 
-            <input type="text" name="name" placeholder="Назва блюда" required>
-
-            <textarea name="description" placeholder="Опис блюда"></textarea>
-
-            <input type="text" name="price" placeholder="Ціна(грн)" min="0" step="any" required>
-
+            {{ add_dish_form.name(placeholder='Назва блюда') }}
+            {{ add_dish_form.description(placeholder='Опис блюда') }}
+            {{ add_dish_form.price(placeholder='Ціна') }}
+            
             <div class="form-group">
                 <label>Зображення блюда</label><br>
                 <input type="file" name="image" id="fileInput" class="file-input">
             </div>
 
-            <input type="submit" class="btn" value="Додати блюдо">
+            {{ add_dish_form.submit(class='btn') }}
         </form>
     </div>
 </div>
@@ -70,18 +68,13 @@
     <div class="modal-content">
         <span class="close-btn">&times;</span>
         <h2>Замовлення</h2>
-        <form action="{{ url_for('create_order') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('create_order') }}" method="POST">
             {{ order_form.hidden_tag() }}
-
-            <input type="hidden" name="product_id" id="modal-product-id">
-
-            <input type="text" name="quantity" placeholder="Кількість" min="0" step="any" required>
-
-            <input type="text" name="delivery_adress" placeholder="Адреса доставки">
-
-            <textarea name="comment" placeholder="Коментар"></textarea>
-
-            <input type="submit" class="btn" value="Замовити">
+            {{ order.form.product_id(type='hidden' id='modal-product-id') }}
+            {{ order_form.quantity(placeholder='Кількість товару') }}
+            {{ order_form.delivery_address(placeholder='Адреса доставки') }}
+            {{ order_form.comment(placeholder='Коментар') }}
+            {{ order_form.submit(class='btn') }}
         </form>
     </div>
 </div>

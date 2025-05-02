@@ -35,7 +35,6 @@ class Order(db.Model):
     customer = db.relationship('User', backref=db.backref('orders', lazy=True))
     delivery_address = db.Column(db.String(200), nullable=False)
     comment = db.Column(db.String(200))
-    status = db.Column(db.String(50), default='Pending')
     
     
 
