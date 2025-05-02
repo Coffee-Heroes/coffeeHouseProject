@@ -12,7 +12,6 @@
     />
     <link rel="stylesheet" href="../static/menu.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <!--ссылки на шрифты-->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Moon+Dance&display=swap"
@@ -32,8 +31,6 @@
         <div class="container-fluid">
           <h2>Їжа</h2>
           <div class="row">
-            {% if dish.type == 'food' %}
-            <div class="card">
             {% for item in food %}
             <div class="card col-md-3 mb-4">
               <div class="card-body">
@@ -88,8 +85,7 @@
                 </ul>
               </div>
             </div>
-            {% endif %}
-            {% endfor %}
+            {%endfor%}
           </div>
         </div>
       </div>
