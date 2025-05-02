@@ -19,9 +19,11 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route("/", methods=["GET"])
 def base():
@@ -36,7 +38,7 @@ def login():
     registration_form = RegistrationForm()
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
-        if user and check_password_hash(user.password, login_form.password.data):  # ❗️рекомендується використовувати hashing
+        if user and check_password_hash(user.password, login_form.password.data):  # ❗️рекомендується юзати hashing
             login_user(user, remember=True)
             session['username'] = user.username
             flash("You’ve been signed in successfully!")
@@ -44,6 +46,7 @@ def login():
         else:
             flash("Invalid credentials")
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -58,8 +61,8 @@ def register():
             email = registration_form.email.data
             username = registration_form.username.data
             role = RoleEnum.USER
-            password=registration_form.password.data
-            confirm=registration_form.confirm.data
+            password = registration_form.password.data
+            confirm = registration_form.confirm.data
             
             if not email.endswith('@gmail.com'):
                 flash('Please, use your google email')
@@ -86,6 +89,7 @@ def register():
             return redirect(url_for('base'))
     return render_template("base.html", login_form=login_form, registration_form=registration_form)
 
+
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
     form = OrderForm()
@@ -109,11 +113,12 @@ def create_order():
         db.session.commit()
         flash('Your order has been created successfully!')
         if current_user.is_authenticated:
-          print('auth')
+            print('auth')
         else:
-          print('not')
+            print('not')
         return redirect(url_for('profile'))
     return render_template('create_order.html', form=form)
+
 
 @app.route("/profile")
 def profile():
@@ -121,6 +126,7 @@ def profile():
         return f"Welcome, {current_user.username}!"
     else:
         return redirect(url_for('base'))
+
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
@@ -140,6 +146,7 @@ def menu():
     form = AddDishForm()
     return render_template("menu.html", form=form, registration_form=reg_form, login_form=log_form, RoleEnum=RoleEnum)
 
+
 @app.route("/add_dish", methods=['GET', 'POST'])
 def add_dish():
     form = AddDishForm()
@@ -157,16 +164,18 @@ def add_dish():
                 return redirect(url_for('menu'))
         
         new_dish = Dish(
-            type = type,
-            name = name,
-            description = description,
-            price = price,
-            image = image
+            type=type,
+            name=name,
+            description=description,
+            price=price,
+            image=image
         )
         db.session.add(new_dish)
         db.session.commit()
         return redirect(url_for('menu'))
     return render_template('menu.html', form=form, RoleEnum=RoleEnum)
+
+
 @app.route("/reviews/")
 def reviews():
     return render_template("reviews.html")
@@ -178,7 +187,7 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-      with app.app_context():
+    with app.app_context():
         db.create_all()
         print("Database tables created!")
-      app.run(port=3001, debug=False)
+        app.run(port=3001, debug=False)

@@ -30,29 +30,27 @@
         <div class="block"></div>
         <div class="container-fluid">
           <div class="row">
-            {% for file in data %}
             <div class="card">
               <div class="card-body">
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item list-item-image">
                     <img
-                      src="{{ file.image }}"
+                      src=""
                       class="card-img-top list-image"
                     />
                   </li>
                   <li class="list-group-item list-item-title">
-                    <h5 class="card-text">{{ file.name }}</h5>
+                    <h5 class="card-text"></h5>
                   </li>
                   <li class="list-group-item list-item-des">
-                    <p class="card-text">{{ file.description }}</p>
+                    <p class="card-text"></p>
                   </li>
                   <li class="list-group-item list-item-price">
-                    <p class="card-subtitle card-value">{{ file.price }}</p>
+                    <p class="card-subtitle card-value"></p>
                   </li>
                 </ul>
               </div>
             </div>
-            {%endfor%}
           </div>
         </div>
 
