@@ -19,13 +19,16 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 @app.template_filter('b64encode')
 def b64encode_filter(data: bytes) -> str:
     return base64.b64encode(data).decode('utf-8')
+
 
 @app.route("/", methods=["GET"])
 def base():
@@ -33,7 +36,8 @@ def base():
     log_form = LoginForm()
     add_dish_form = AddDishForm()
     order_form = OrderForm()
-    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
 @app.route("/login", methods=["POST"])
@@ -51,7 +55,9 @@ def login():
             return redirect(url_for('base'))
         else:
             flash("Invalid credentials")
-    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -68,12 +74,12 @@ def register():
             email = reg_form.email.data
             username = reg_form.username.data
             role = RoleEnum.USER
-            password=reg_form.password.data
-            
-            if email.endswith('@gmail.com') or email.endswith('@ukr.net'):         
+            password = reg_form.password.data
+
+            if email.endswith('@gmail.com') or email.endswith('@ukr.net'):
                 if email == 'coffeeHeroes@ukr.net':
                     role = RoleEnum.ADMIN
-                    
+
                 new_user = User(
                     username=username,
                     email=email,
@@ -89,7 +95,9 @@ def register():
             else:
                 flash('Please, use your google or ukr.net email')
                 return redirect(url_for('base'))
-    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template("base.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+
 
 @app.route('/create_order', methods=['GET', 'POST'])
 def create_order():
@@ -99,52 +107,57 @@ def create_order():
     add_dish_form = AddDishForm()
     print("PRODUCT ID:", order_form.product_id.data)
     if order_form.validate_on_submit():
-        print("Received product ID:", product_id)
         product_id = order_form.product_id.data
+        print("Received product ID:", product_id)
         quantity = order_form.quantity.data
-        customer_id = current_user.id 
+        customer_id = current_user.id
         delivery_address = order_form.delivery_address.data
         comment = order_form.comment.data
 
         new_order = Order(
-            product_id = product_id,
-            quantity = quantity,
-            customer_id = customer_id,
-            delivery_address = delivery_address,
-            comment = comment
+            product_id=product_id,
+            quantity=quantity,
+            customer_id=customer_id,
+            delivery_address=delivery_address,
+            comment=comment
         )
         db.session.add(new_order)
         db.session.commit()
         flash('Your order has been created successfully!')
         return redirect(url_for('menu'))
-    return render_template('menu.html', order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template('menu.html', order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
     logout_user()
     return redirect(url_for("base"))
-    
 
-@app.route("/about")
+
+@app.route("/about/")
 def about():
     reg_form = RegistrationForm()
     log_form = LoginForm()
     add_dish_form = AddDishForm()
     order_form = OrderForm()
-    return render_template("about.html", order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template("about.html", order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
-@app.route("/menu")
+@app.route("/menu/")
 def menu():
     order_form = OrderForm()
     reg_form = RegistrationForm()
     log_form = LoginForm()
     add_dish_form = AddDishForm()
-    
-    drinks = Dish.query.filter_by(type='drink').all()    
+
+    drinks = Dish.query.filter_by(type='drink').all()
     food = Dish.query.filter_by(type='food').all()
 
-    return render_template("menu.html",order_form=order_form, drinks=drinks, food=food, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+    return render_template("menu.html", order_form=order_form, drinks=drinks, food=food, log_form=log_form,
+                           reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
+
 
 @app.route("/add_dish", methods=['GET', 'POST'])
 def add_dish():
@@ -159,28 +172,25 @@ def add_dish():
         price = add_dish_form.price.data
         image_file = add_dish_form.image.data
         image_mime = image_file.mimetype
-        
+
         image_bytes = image_file.read()
-        
-        
+
         new_dish = Dish(
-            type = type,
-            name = name,
-            description = description,
-            price = price,
-            image = image_bytes,
-            image_mime = image_mime
+            type=type,
+            name=name,
+            description=description,
+            price=price,
+            image=image_bytes,
+            image_mime=image_mime
         )
         db.session.add(new_dish)
         db.session.commit()
         return redirect(url_for('menu'))
-    return render_template('menu.html',order_form=order_form, log_form=log_form, reg_form=reg_form, add_dish_form=add_dish_form, RoleEnum=RoleEnum)
-@app.route("/reviews")
-def reviews():
-    return render_template("reviews.html")
+    return render_template('menu.html', order_form=order_form, log_form=log_form, reg_form=reg_form,
+                           add_dish_form=add_dish_form, RoleEnum=RoleEnum)
 
 
-@app.errorhandler(404) 
+@app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
