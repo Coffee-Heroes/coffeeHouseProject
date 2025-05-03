@@ -70,7 +70,7 @@
         <h2>Замовлення</h2>
         <form action="{{ url_for('create_order') }}" method="POST">
             {{ order_form.hidden_tag() }}
-            {{ order.form.product_id(type='hidden' id='modal-product-id') }}
+            {{ order_form.product_id(type='hidden', id='modal-product-id') }}
             {{ order_form.quantity(placeholder='Кількість товару') }}
             {{ order_form.delivery_address(placeholder='Адреса доставки') }}
             {{ order_form.comment(placeholder='Коментар') }}
